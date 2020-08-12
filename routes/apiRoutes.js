@@ -14,8 +14,13 @@ module.exports = (app) => {
   });
 
   //Add exercises to a workout plan
-  app.put("/api/workouts/:id", ({ body }, res) => {
-    db.Workout.create(body)
+  app.put("/api/workouts/:id", (req, res) => {
+    console.log(req);
+    db.Workout.findByIdAndUpdate(
+      req.params.id,
+      { $push: { exercise: res.body }},
+      { new: true },    
+    )
       .then(dbWorkout => {
         res.json(dbWorkout);
       })
