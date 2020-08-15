@@ -15,13 +15,14 @@ module.exports = (app) => {
 
   //Add exercises to a workout plan
   app.put("/api/workouts/:id", (req, res) => {
-    console.log(req);
+    console.log("exercise put route", req.body);
     db.Workout.findByIdAndUpdate(
       req.params.id,
-      { $push: { exercise: res.body }},
+      { $push: { exercises: req.body }},
       { new: true },    
     )
       .then(dbWorkout => {
+        console.log("dbWorkout", dbWorkout)
         res.json(dbWorkout);
       })
       .catch(err => {
@@ -30,8 +31,9 @@ module.exports = (app) => {
   });
 
   //create workout
-  app.post("/api/workouts", ({ body }, res) => {
-    db.Workout.create(body)
+  app.post("/api/workouts", (req, res) => {
+    console.log("body post route", req.body);
+    db.Workout.create(req.body)
       .then(dbWorkout => {
         res.json(dbWorkout);
       })
